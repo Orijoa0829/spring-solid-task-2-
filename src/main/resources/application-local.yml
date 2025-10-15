@@ -1,15 +1,20 @@
+# ===================================================================
+# 0. Spring Boot 기본 설정
+# ===================================================================
 spring:
+  application:
+    name: solid-task-solapi-app # 애플리케이션 이름 지정
+
   # ===================================================================
   # 1. 데이터소스(DB) 설정
   # H2 데이터베이스에 어떻게 연결할지 스프링에게 알려줍니다.
   # ===================================================================
   datasource:
-    # url: jdbc:h2:mem:solidtask -> 'solidtask'라는 이름의 메모리 기반 DB를 사용합니다.
-    # 서버를 재시작하면 데이터는 사라집니다.
+    # 'demsolidtask'라는 이름의 메모리 기반 DB를 사용합니다.
     url: jdbc:h2:mem:demsolidtask
-    username: sa # H2 DB 기본 사용자 이름
-    password: # 비밀번호는 없음
-    driver-class-name: org.h2.Driver # H2 드라이버 지정
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
 
   # ===================================================================
   # 2. H2 데이터베이스 콘솔 설정
@@ -17,8 +22,8 @@ spring:
   # ===================================================================
   h2:
     console:
-      enabled: true # H2 콘솔 기능 활성화
-      path: /h2-console # 브라우저에서 접속할 경로 http://localhost:8080/h2-console
+      enabled: true
+      path: /h2-console # 접속 경로: http://localhost:8080/h2-console
 
   # ===================================================================
   # 3. JPA 및 Hibernate 설정
@@ -27,24 +32,57 @@ spring:
   jpa:
     # JPA의 구현체인 Hibernate에 대한 설정
     hibernate:
-
-      # ddl-auto: 애플리케이션 실행 시점에 DB 스키마(테이블 등)를 어떻게 처리할지 결정
-      # create-drop: 실행 시점에 엔티티 기준으로 테이블을 생성하고, 종료 시점에 모두 삭제합니다. (개발용으로 편리함)
+      # ddl-auto: 실행 시점에 엔티티 기준으로 테이블을 생성하고, 종료 시점에 모두 삭제합니다. (개발용)
       ddl-auto: create-drop
 
-    # JPA가 생성하고 실행하는 SQL 쿼리를 개발자가 볼 수 있도록 하는 설정
     properties:
       hibernate:
         default_batch_fetch_size: 10
-        format_sql: true # SQL 쿼리를 보기 좋게 줄바꿈하여 포맷팅
-    show-sql: true # 실행되는 SQL 쿼리를 콘솔에 출력
-    open-in-view: true
+        format_sql: true # SQL 쿼리를 보기 좋게 포맷팅
 
+    show-sql: true # 실행되는 SQL 쿼리를 콘솔에 출력
+    open-in-view: false # Lazy Loading 문제 방지를 위해 보통 false로 설정 권장
+
+# ===================================================================
+# 4. 서버 설정
+# ===================================================================
+server:
+  port: 8080 # 애플리케이션이 실행될 포트
+
+# ===================================================================
+# 5. 로깅 설정 (개발 및 운영 시 디버깅 정보 관리)
+# ===================================================================
+logging:
+  level:
+    # 프로젝트 기본 패키지 로깅 레벨
+    com.puzzlix.solid_task: INFO
+    # Solapi 통신을 담당하는 Client의 상세 디버깅 활성화
+    com.yourpackage.SolapiClient: DEBUG
+    # Spring Web 요청 처리의 상세 정보
+    org.springframework.web: INFO
+
+# ===================================================================
+# 6. 보안 설정 (JWT 관련)
+# ===================================================================
 jwt:
   secret: 'VGhpc0lzQVNlY3JldEtleUZvckpXVFNhZmUhIT8xMjM0NTY='
-  expiration-in-ms: 3600000 # 1시간
+  expiration-in-ms: 3600000 # 1시간 (3600000ms)
 
+# ===================================================================
+# 7. 알림 설정 (기존 설정)
+# ===================================================================
 notification:
   policy:
     # 이슈 상태가 DONE 으로 변경되었을 때 사용할 알림 타입 지정
     on-status-done: SMS
+
+solapi:
+  api:
+
+    key: NCSMDZAWY38TCEFE
+
+    secret: 3Q3NNMEUYEWS3LWARRAYVNKD4Q672PFA
+
+    default-sender-number: 0212345678
+
+    send-url: https://api.solapi.com/messages/v4/send-many/detail
