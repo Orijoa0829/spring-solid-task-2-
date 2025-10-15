@@ -12,10 +12,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration // IoC 대상
 public class AppConfig {
 
-
-
     @Bean //IoC
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
+
 }
