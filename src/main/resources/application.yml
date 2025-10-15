@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    active: local #\uAE30\uBCF8\uC801\uC73C\uB85C local \uD504\uB85C\uD544 \uD65C\uC131\uD654
+
+
+# \uBAA8\uB4E0 \uD658\uACBD \uACF5\uD1B5 \uC124\uC815
+server:
+  port: 8080
